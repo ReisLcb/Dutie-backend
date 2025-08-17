@@ -43,8 +43,4 @@ export const UsuarioController = {
       return res.status(400).json("Erro ao criar aluno")
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> e6d0c9dcf28eaec261ba01dfd1c8135f75060a17
