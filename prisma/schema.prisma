@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,39 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model lista_tarefas {
+  id                    Int      @id @default(autoincrement())
+  usuario_id            Int
+  titulo                String   @db.VarChar(45)
+  descricao             String   @db.VarChar(260)
+  data_criacao          String   @db.VarChar(45)
+  data_ultima_alteracao String   @db.VarChar(45)
+  visibilidade          String   @db.VarChar(45)
+  usuario               usuario  @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_lista_tarefas_usuario")
+  tarefa                tarefa[]
+
+  @@index([usuario_id], map: "fk_lista_tarefas_usuario_idx")
+}
+
+model tarefa {
+  codigo           Int           @id @default(autoincrement())
+  lista_tarefas_id Int
+  nome             String        @db.VarChar(45)
+  descricao        String        @db.VarChar(260)
+  prioridade       String        @db.VarChar(45)
+  status           String        @db.VarChar(45)
+  lista_tarefas    lista_tarefas @relation(fields: [lista_tarefas_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarefa_lista_tarefas1")
+
+  @@index([lista_tarefas_id], map: "fk_tarefa_lista_tarefas1_idx")
+}
+
+model usuario {
+  id              Int             @id @default(autoincrement())
+  nome            String          @db.VarChar(100)
+  nome_de_usuario String          @unique(map: "nome_de_usuario_UNIQUE") @db.VarChar(100)
+  email           String          @db.VarChar(45)
+  senha           String          @db.VarChar(50)
+  lista_tarefas   lista_tarefas[]
 }
