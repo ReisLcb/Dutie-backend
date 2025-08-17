@@ -10,3 +10,4 @@ router.get("/usuarios", UsuarioController.getAll)
 router.post("/usuarios", UsuarioController.create)
 
 export default router
+
